@@ -11,4 +11,4 @@
 ![userAuthority](https://github.com/hatmen/pystudy/blob/master/upops/static/2.png)
 
 数据库管理
-![dbManage](https://github.com/hatmen/pystudy/blob/master/upops/static/2.png)
+![dbManage](https://github.com/hatmen/pystudy/blob/master/upops/static/3.png)
