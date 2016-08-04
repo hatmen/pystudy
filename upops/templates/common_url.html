@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block common_url %} class="active" {% endblock %}
+{% block content %}
+    <!-- page heading start-->
+    <div class="page-heading">
+        <h3>
+            URL管理
+        </h3>
+        <ul class="breadcrumb">
+            <li>
+                <a href="{% url 'upops_admin' %}">仪表盘</a>
+            </li>
+            <li class="active"> URL管理 </li>
+        </ul>
+    </div>
+    <!-- page heading end-->
+
+    <div class="wrapper">
+        <div class="row">
+            {%  for i in url_list %}
+                    <div class="col-md-6">
+                        <section class="panel">
+                            <header class="panel-heading">
+                                <span class="text-muted">{{ i.title_name }} </span>
+                        <span class="tools pull-right">
+                            <a class="fa fa-chevron-down" href="javascript:;"></a>
+
+                            <a class="fa fa-times" href="javascript:;"></a>
+                         </span>
+                            </header>
+                            <div class="panel-body">
+                                <ul class="goal-progress">
+                                    {%  for msg in i.msg %}
+                                        <li>
+                                            <div class="details">
+                                                <a href="{{ msg.url }}">{{ msg.name }}</a>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+
+                            </div>
+                        </section>
+                    </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

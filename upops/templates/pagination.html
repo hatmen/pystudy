@@ -1,0 +1,25 @@
+{#{% if page_switch %}#}
+	<div class="text-center">
+		<ul class="pagination pagination-sm">
+			{% if objects.has_previous %}
+				<li><a href="?page={{ objects.previous_page_number }}"> << </a></li>
+			{% else %}
+				<li class="active"><a> << </a></li>
+			{% endif %}
+
+			{% for p in page_range %}
+			{% ifequal p objects.number %}
+				<li class="active"><a>{{p}}</a></li>
+			{% else %}
+				<li><a href="?page={{p}}" title="第{{p}}页">{{p}}</a><li>
+			{% endifequal %}
+			{% endfor %}
+
+			{% if objects.has_next %}
+				<li><a href="?page={{ objects.next_page_number }}"> >> </a></li>
+			{% else %}
+				<li class="active"><a> >> </a></li>
+			{% endif %}
+		</ul>
+	</div>
+{#{% endif %}#}

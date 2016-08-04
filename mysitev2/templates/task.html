@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+		{% block head %}
+        <title>定时任务</title>
+        <!-- Bootstrap -->
+        <link href="/demo/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="/demo/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+        <link href="/demo/assets/styles.css" rel="stylesheet" media="screen">
+        <script src="/demo/vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+		{% endblock %}
+		
+		{% block task %} class="active" {% endblock %}
+		
+		{% block span %}
+				<div class="span9" id="content">
+					<div class="row-fluid">
+					{% if task_status %}
+						<div class="alert alert-success">
+							<button class="close" data-dismiss="alert">&times;</button>
+							<strong>Success!</strong> Task is running...
+						</div>
+					{% else %}
+						<div class="alert alert-error">
+							<button class="close" data-dismiss="alert">&times;</button>
+							<strong>Error!</strong> Task is stopping...
+						</div>
+					{% endif %}
+                        <!-- block -->
+                        <div class="block">
+                            <div class="navbar navbar-inner block-header">
+                                <div class="muted pull-left">任务列表</div>
+                                <div class="pull-right">
+                                    <a href="/demo/taskadd.html">
+                                        <button style="margin-top: -5px;" class="btn btn-success">添加任务</button>
+                                    </a>
+                                    <a href="/demo/taskstart/">
+                                        <button style="margin-top: -5px;" class="btn btn-primary">更新任务</button>
+                                    </a>
+                                </div>
+                            </div>
+                                <div class="block-content collapse in">
+                                    <div class="span12">
+                                        <div class="span6" style="margin-bottom: 10px;">
+                                            <div id="example_filter" class="dataTables_filter">
+                                                <form action="/demo/taskshow/" class="navbar-form navbar-left" role="search">
+                                                    <div class="form-group">
+                                                        <input type="text" name="search" class="form-control" placeholder="Search">
+                                                        <button type="submit" style="margin-bottom: -5px;" class="btn btn-default">Search</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                         </div>
+                                        <div class="span6" style="margin-bottom: 10px;">
+                                            <div class="pull-right">
+                                                <span class="badge badge-success">ON：{{ on_num }}</span>
+                                                <span class="badge badge-warning">OFF：{{ off_num }}</span>
+                                             </div>
+                                        </div>
+  									<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="example">
+										<thead>
+											<tr>
+											      <th>任务名称</th>
+											      <th>执行时间</th>
+											      <th>创建时间</th>
+											      <th>NO/OFF</th>
+											      <th>删除</th>
+											</tr>
+										</thead>
+										<tbody>
+                                            {%  for list in objects %}
+											<tr class="gradeA">
+											      <td>
+                                                    <button type="button" class="btn btn-link">
+                                                    <a href="/demo/taskcheck/?id={{ list.only_id }}">{{ list.file_name }}</a>
+                                                    </button>
+                                                </td>
+											      <td>{{ list.email_crontab }}</td>
+											      <td>{{ list.create_time }}</td>
+											      <td class="center">
+                                                    {%  if list.task_status == 1 %}
+                                                    <span class="label label-success">ON</span>
+                                                    {% else %}
+                                                    <span class="label label-warning">OFF</span>
+                                                    {% endif %}
+                                                </td>
+											      <td class="center">
+                                                    <button onclick="task_del('{{ list.only_id }}','{{ list.file_name }}')" class="btn btn-danger btn-mini">删除</button>
+                                                </td>
+											</tr>
+                                            {%  endfor %}
+										</tbody>
+									</table>
+                                </div>
+                            </div>
+                                        {% if page_switch %}
+                                        <div class="pagination">
+                                            <nav style="text-align: center">
+											<ul>
+                                                {% if show_list.has_previous %}
+	                                                <li><a href="?page={{ show_list.previous_page_number }}">前一页</a></li>
+                                                {% else %}
+                                                    <li class="active"><a>前一页</a></li>
+                                                {% endif %}
+
+                                                {% for p in page_range %}
+                                                {% ifequal p show_list.number %}
+                                                    <li class="active"><a>{{p}}</a></li>
+                                                {% else %}
+                                                    <li><a href="?page={{p}}" title="第{{p}}页">{{p}}</a><li>
+                                                {% endifequal %}
+                                                {% endfor %}
+
+                                                {% if show_list.has_next %}
+                                                    <li><a href="?page={{ show_list.next_page_number }}">后一页</a></li>
+                                                {% else %}
+                                                    <li class="active"><a>后一页</a></li>
+                                                {% endif %}
+											</ul>
+                                            </nav>
+										</div>
+                                        {% endif %}
+									</div>
+                        <!-- /block -->
+								</div>
+							</div>
+						</div>
+					</div>
+
+{% endblock %}
+{% block script %}
+        <!--/.fluid-container-->
+        <script src="/demo/vendors/jquery-1.9.1.min.js"></script>
+        <script src="/demo/bootstrap/js/bootstrap.min.js"></script>
+        <script src="/demo/vendors/easypiechart/jquery.easy-pie-chart.js"></script>
+        <script src="/demo/assets/scripts.js"></script>
+        <script>
+        function task_del(only_id,taskname) {
+            if (confirm('确定你要删除'+' '+taskname))
+                $.ajax({
+                    type: "GET",
+                    url: "/demo/taskdel/?id=" +only_id,
+                    cache: false,
+                });
+                location.reload();
+        }
+        </script>
+ {% endblock %}

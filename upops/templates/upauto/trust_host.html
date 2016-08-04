@@ -1,0 +1,58 @@
+{% extends "upauto/host_init.html" %}
+{% block section-content %}
+    <section class="panel">
+         <header class="panel-heading">
+             主机互信
+             <span class="tools pull-right">
+                <a href="javascript:;" class="fa fa-chevron-down"></a>
+                <a href="javascript:;" class="fa fa-times"></a>
+             </span>
+         </header>
+        <div class="panel-body">
+                <form action="{% url 'auto_trust_host' %}" class="form-horizontal adminex-form cmxform" id="commentForm" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <div id="host" class="col-lg-10">
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <input type="text" class="form-control" name="ip" placeholder="127.0.0.1" required>
+                                </div>
+                                <div class="col-lg-2">
+                                    <input type="text" class="form-control" name="port" placeholder="22" required>
+                                </div>
+                                <div class="col-lg-2">
+                                    <input type="text" class="form-control" name="user" placeholder="root" required>
+                                </div>
+                                <div class="col-lg-3">
+                                    <input type="text" class="form-control" name="password" placeholder="password" required>
+                                </div>
+                                <span id='add_sheet' class="btn btn-success">添加主机</span>
+                            </div>
+                        </div>
+                    </div>
+                        <button class="btn btn-primary" type="submit">确定</button>
+                </form>
+        </div>
+    </section>
+{% endblock %}
+{% block auto_footer_js %}
+    <script>
+    $("#add_sheet").click(function(){
+            $("#host").append('<br>' +
+                    '<div class="row">' +
+                    '<div class="col-lg-3">' +
+                    '<input type="text" class="form-control" name="ip" placeholder="127.0.0.1" required>' +
+                    '</div>' +
+                    '<div class="col-lg-2">' +
+                    '<input type="text" class="form-control" name="port" placeholder="22" required>' +
+                    '</div>' +
+                    '<div class="col-lg-2">' +
+                    '<input type="text" class="form-control" name="user" placeholder="root" required>' +
+                    '</div>' +
+                    '<div class="col-lg-3">' +
+                    '<input type="text" class="form-control" name="password"  placeholder="password" required>' +
+                    '</div>' +
+                    '</div>');
+        });
+    </script>
+{% endblock %}

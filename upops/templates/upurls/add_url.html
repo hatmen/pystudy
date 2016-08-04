@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block content %}
+    {% load mytags %}
+    <!-- page heading start-->
+    <div class="page-heading" xmlns="http://www.w3.org/1999/html">
+        <h3>
+            添加URL
+        </h3>
+        <ul class="breadcrumb">
+            <li>
+                <a href="{% url 'upops_admin' %}">仪表盘</a>
+            </li>
+            <li class=""> URL管理 </li>
+            <li class="">
+                <a href="{% url 'url_list' %}">查看URL </a>
+            </li>
+            <li class="active"> 添加URL </li>
+        </ul>
+    </div>
+    <!-- page heading end-->
+            <div class="wrapper">
+            <div class="row">
+                <div class="col-md-8">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            添加URL组
+                        </header>
+                        <div class="panel-body">
+                            {% if smg %}
+                                <div class="alert alert-success fade in">
+                                <button type="button" class="close close-sm" data-dismiss="alert">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                                <strong>Sucess! </strong> {{ smg }}
+                            </div>
+                            {% endif %}
+                             <form action="{% url 'add_url' %}" class="form-horizontal adminex-form cmxform" id="commentForm" method="post">
+                             {% csrf_token %}
+                                    <div class="form-group ">
+                                        <label for="cname" class="control-label col-lg-2">名称 *</label>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" id="cname" name="name"  minlength="2" type="text" required />
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="curl" class="control-label col-lg-2">URL *</label>
+                                        <div class="col-lg-8">
+                                            <input class="form-control " id="curl" type="url" name="url" placeholder="http://127.0.0.1/" required />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cemail" class="control-label col-lg-2">URL组 *</label>
+                                        <div class="col-lg-8">
+                                            <select class="form-control m-bot15" name="group" >
+                                                <option value="">-----------------</option>
+                                                {% for list in url_group %}
+                                                <option value="{{ list.id }}">{{ list.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="cname" class="control-label col-lg-2">信息</label>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" id="cname" name="info" minlength="2" type="text" placeholder="admin::xxxxxx" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="ccomment" class="control-label col-lg-2">备注</label>
+                                        <div class="col-lg-8">
+                                            <textarea class="form-control " id="ccomment" name="comment"></textarea>
+                                        </div>
+                                    </div>
+                                        <div class="col-lg-offset-2 col-lg-10">
+                                            <button class="btn btn-primary" type="submit">Save</button>
+                                        </div>
+                                </form>
+                            </div>
+                        </section>
+                    </div>
+
+                </div>
+            </div>
+{% endblock %}

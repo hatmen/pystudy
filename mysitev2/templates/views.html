@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+		{% block head %}
+        <title> 常用URL</title>
+        <!-- Bootstrap -->
+        <link href="/demo/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="/demo/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+        <link href="/demo/assets/styles.css" rel="stylesheet" media="screen">
+        <script src="/demo/vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+		{% endblock %}
+
+		{% block views %} class="active" {% endblock %}
+
+		{% block span %}
+				<div class="span6" id="content">
+					<div class="row-fluid">
+                        <!-- block -->
+                        <div class="block">
+                            <div class="navbar navbar-inner block-header">
+                                <div class="muted pull-left">常用URL</div>
+                            </div>
+                        		<div class="well" style="margin-top:30px;">
+                                {%  for http in url_list %}
+                                    <a href="{{ http.url }}">
+                                  <button type="button" class="btn btn-large btn-block">{{ http.name }}</button></a>
+                                <br>
+                                {%  endfor %}
+							    </div>
+                        </div>
+                        <!-- /block -->
+								</div>
+							</div>
+						</div>
+					</div>
+
+{% endblock %}
+{% block script %}
+        <!--/.fluid-container-->
+        <script src="/demo/vendors/jquery-1.9.1.min.js"></script>
+        <script src="/demo/bootstrap/js/bootstrap.min.js"></script>
+        <script src="/demo/vendors/easypiechart/jquery.easy-pie-chart.js"></script>
+        <script src="/demo/assets/scripts.js"></script>
+ {% endblock %}

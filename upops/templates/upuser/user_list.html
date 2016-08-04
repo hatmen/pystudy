@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block content %}
+    {% load mytags %}
+    <!-- page heading start-->
+    <div class="page-heading">
+        <h3>
+            查看用户
+        </h3>
+        <ul class="breadcrumb">
+            <li>
+                <a href="{% url 'upops_admin' %}">仪表盘</a>
+            </li>
+            <li class=""> 用户管理 </li>
+            <li class="active"> 查看用户 </li>
+        </ul>
+    </div>
+    <!-- page heading end-->
+            <div class="wrapper">
+
+            <!-- database list -->
+            <div  class="row">
+                <div class="col-md-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            用户查询
+                            <span class="tools pull-right">
+                                <a href="javascript:;" class="fa fa-chevron-down"></a>
+                                <a href="javascript:;" class="fa fa-times"></a>
+                                </span>
+                        </header>
+                        <div class="panel-body">
+                            <section id="flip-scroll">
+                                    <div class="col-md-1" style="left: -15px">
+                                        <a href="{% url 'upuser_add' %}" class="btn btn-success">添加用户</a>
+                                    </div>
+                                    <form id="search_form">
+                                        <div class="col-md-2" style="left: -15px">
+                                            <select class="form-control m-bot15" name="search_status" onchange="change_info()">
+                                                <option value="">--- 状态 ---</option>
+                                                {% for tuple in user_status %}
+                                                <option value="{{ tuple.0 }}">{{ tuple.1 }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <!--search-->
+                                        <div class="col-md-3 pull-right" >
+                                            <form role="form" action="{% url 'upuser_list' %}">
+                                            <div class="input-group m-bot15">
+                                                <input type="text" class="form-control" name="search_name" placeholder="Username">
+                                                <span class="input-group-btn">
+                                                <button class="btn btn-info" type="submit" >Search!</button>
+                                                </span>
+                                            </div>
+                                            </form>
+                                        </div>
+                                        </form>
+                                <table class="table table-bordered table-striped table-condensed cf">
+                                    <thead class="cf">
+                                    <tr>
+                                        <th>用户名</th>
+                                        <th>邮箱</th>
+                                        <th class="numeric">登陆时间</th>
+                                        <th class="numeric">状态</th>
+                                        <th class="numeric">权限管理</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for list in objects %}
+                                    <tr>
+                                        <td><a href="{% url 'upuser_edit' %}?id={{ list.id }}">{{ list.username }}</a></td>
+                                        <td>{{ list.email }}</td>
+                                        <td class="numeric">{{ list.last_login }}</td>
+                                        <td class="numeric">
+                                            {% if list.is_active %}
+                                            <span class="label label-success">启用</span>
+                                            {% else %}
+                                             <span class="label label-danger">禁用</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-danger btn-xs" onclick="revoke('{{ list.username }}')">删除</button>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% include "pagination.html" %}
+                            </section>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            </div>
+    {% endblock %}
+    {% block footer_js %}
+        <script src="/static/js/checkbox.js"></script>
+        <script>
+        function change_info(){
+        var args = $("#search_form").serialize();
+        window.location = "{% url 'dbm_user_info' %}?" + args
+        }
+
+        $("#search_input").keydown(function(e){
+        if(e.keyCode==13){
+        change_info()
+        }
+        });
+
+	    function revoke(username)
+        {
+            if (confirm("你确定要对"+username+"用户操作?"))
+                {
+                    var url = "{%  url 'upuser_del' %}?&username="+username
+                    $.ajax({
+                        cache:false,
+                        url:url,
+                        type:"get",
+                        success:function(html){
+                            location.reload();
+                        }
+                    });
+                }
+        }
+        </script>
+{% endblock %}

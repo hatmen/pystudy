@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block content %}
+    {% load mytags %}
+    <!-- page heading start-->
+    <div class="page-heading">
+        <h3>
+            查看URL
+        </h3>
+        <ul class="breadcrumb">
+            <li>
+                <a href="{% url 'upops_admin' %}">仪表盘</a>
+            </li>
+            <li class=""> URL管理 </li>
+            <li class="active"> 查看URL </li>
+        </ul>
+    </div>
+    <!-- page heading end-->
+            <div class="wrapper">
+
+            <!-- url list -->
+            <div  class="row">
+                <div class="col-md-10">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            URL信息详情列表
+                            <span class="tools pull-right">
+                                <a href="javascript:;" class="fa fa-chevron-down"></a>
+                                <a href="javascript:;" class="fa fa-times"></a>
+                                </span>
+                        </header>
+                        <div class="panel-body">
+                            <section id="flip-scroll">
+                                <div class="col-md-3" style="left: -15px">
+                                    <form id="search_form" action="{% url 'url_list' %}">
+                                            <select class="form-control m-bot15" onchange="change_info()" name="search_name">
+                                                <option value="">--- URL组 ---</option>
+                                                {% for list in url_group %}
+                                                <option value="{{ list.name }}">{{ list.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                    </form>
+                                </div>
+                                    <div class="col-md-3" style="left: -15px">
+                                        <a href="{% url 'add_url' %}" class="btn btn-success">添加URL</a>
+                                    </div>
+                                        <div class="col-md-3 pull-right" >
+                                            <form role="form" action="{% url 'url_add_group' %}">
+                                            <div class="input-group m-bot15">
+                                                <input type="text" class="form-control" name="search_name" placeholder="Username">
+                                                <span class="input-group-btn">
+                                                <button class="btn btn-info" type="submit" >Search!</button>
+                                                </span>
+                                            </div>
+                                            </form>
+                                        </div>
+                                <table class="table table-bordered table-striped table-condensed cf">
+                                    <thead class="cf">
+                                    <tr>
+                                        <th class="text-center">URL名</th>
+                                        <th class="text-center">URL所在组</th>
+                                        <th class="text-center numeric">备注</th>
+                                        <th class="text-center numeric">操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for list in objects %}
+                                    <tr>
+                                        <td class="text-center"><a href="{{ list.http }}">{{ list.name }}</a></td>
+                                        <td class="text-center">{{ list.group }}</td>
+                                        <td class="numeric">{{ list.comment }}</td>
+                                        <td class="text-center">
+                                            <a class="btn btn-danger btn-xs" href="{% url 'url_del' %}?url_id={{ list.id }}">删除</a>
+                                            <a class="btn btn-success btn-xs" href="{% url 'url_edit' %}?id={{ list.id }}">编辑</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% include "pagination.html" %}
+                            </section>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            </div>
+    {% endblock %}
+    {% block footer_js %}
+        <script>
+        function change_info(){
+        var args = $("#search_form").serialize();
+        window.location = "{% url 'url_list' %}?" + args
+        }
+
+        </script>
+{% endblock %}

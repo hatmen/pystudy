@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% block head_css_js %}
+    <!--multi-select-->
+    <link rel="stylesheet" type="text/css" href="/static/js/jquery-multi-select/css/multi-select.css" />
+
+{% endblock %}
+{% block content %}
+    {% load mytags %}
+    <!-- page heading start-->
+    <div class="page-heading">
+        <h3>
+            编辑用户
+        </h3>
+        <ul class="breadcrumb">
+            <li>
+                <a href="{% url 'upops_admin' %}">仪表盘</a>
+            </li>
+            <li class=""> 用户管理 </li>
+            <li class="active"> 查看用户 </li>
+        </ul>
+    </div>
+    <!-- page heading end-->
+            <div class="wrapper">
+            <div class="row">
+                <div class="col-md-8">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            编辑用户
+                        </header>
+                        <div class="panel-body">
+                            {% if emg %}
+                                <div class="alert alert-warning fade in">
+                                <button type="button" class="close close-sm" data-dismiss="alert">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                                <strong>Warning! </strong> {{ emg }}
+                            </div>
+                            {% endif %}
+                            {% if smg %}
+                                <div class="alert alert-success fade in">
+                                <button type="button" class="close close-sm" data-dismiss="alert">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                                <strong>Sucess! </strong> {{ smg }}
+                            </div>
+                            {% endif %}
+                             <form class="cmxform form-horizontal adminex-form" id="commentForm" method="POST" action="{% url 'upuser_edit' %}">
+                                 {% csrf_token %}
+                                 <div class="form-group">
+                                        <label for="cname" class="control-label col-lg-2">用户名 *</label>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" value="{{ user.username }}" id="cname" name="name" minlength="2" type="text" required />
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="cemail" class="control-label col-lg-2">邮箱 *</label>
+                                        <div class="col-lg-8">
+                                            <input class="form-control " id="exampleInputEmail1" value="{{ user.email }}" type="email" name="email" required />
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="inputPassword1" class="control-label col-lg-2">密码</label>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" id="inputPassword1" name="password" minlength="2" type="password" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group last">
+                                        <label class="control-label col-lg-2">权限</label>
+                                            <div class="col-lg-8">
+                                                <select name="access_url" class="multi-select" multiple="" id="my_multi_select1">
+                                                    {% for url in url_all %}
+                                                        {% if url in urls %}
+                                                            <option selected value="{{ url.url }}">{{ url.url }}</option>
+                                                        {% else %}
+                                                            <option value="{{ url.url }}">{{ url.url }}</option>
+                                                        {% endif %}
+                                                     {% endfor %}
+                                                </select>
+                                            </div>
+                                    </div>
+                                 <div class="form-group">
+                                    <label class="col-md-2 control-label">其他</label>
+                                    <div class="col-md-6 icheck ">
+                                        <div class="minimal single-row">
+                                            <div class="checkbox">
+                                                {% if user.is_active == 1 %}
+                                                <input type="checkbox" name="is_active" value="0">
+                                                <label>禁用 </label>
+                                                {% else %}
+                                                <input type="checkbox" name="is_active" value="1">
+                                                <label>启用 </label>
+                                                {% endif %}
+                                            </div>
+                                            <div class="checkbox ">
+                                                <input type="checkbox" name="is_email" value="1">
+                                                <label>发送邮件</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                    </div>
+                                        <div class="col-lg-offset-2 col-lg-10">
+                                            <button class="btn btn-primary" type="submit">Save</button>
+                                            <button class="btn btn-default" type="button">Cancel</button>
+                                        </div>
+                                </form>
+                            </div>
+                        </section>
+                    </div>
+            </div>
+            </div>
+            </div>
+    {% endblock %}
+    {% block footer_js %}
+        <!--icheck -->
+        <script src="/static/js/iCheck/jquery.icheck.js"></script>
+        <script src="/static/js/icheck-init.js"></script>
+        <!--multi-select-->
+        <script type="text/javascript" src="/static/js/jquery-multi-select/js/jquery.multi-select.js"></script>
+        <script type="text/javascript" src="/static/js/jquery-multi-select/js/jquery.quicksearch.js"></script>
+        <script src="/static/js/multi-select-init.js"></script>
+        <script src="/static/js/checkbox.js"></script>
+        <script>
+        function change_info(){
+        var args = $("#search_form").serialize();
+        window.location = "{% url 'dbm_user_info' %}?" + args
+        }
+
+        $("#search_input").keydown(function(e){
+        if(e.keyCode==13){
+        change_info()
+        }
+        });
+
+	    function revoke(username,role)
+        {
+            if (confirm("你确定要对"+username+"用户操作?"))
+                {
+                    var url = "{%  url 'dbm_db_revoke' %}?&username="+username+"&status="+role+"&ip=%"
+                    $.ajax({
+                        cache:false,
+                        url:url,
+                        type:"get",
+                        success:function(html){
+                            location.reload();
+                        }
+                    });
+                }
+        }
+        </script>
+{% endblock %}

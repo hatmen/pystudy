@@ -1,0 +1,222 @@
+{% extends "common/base_cm.html" %}
+{% block content %}
+    {% load mytags %}
+    <!-- page heading start-->
+    <div class="page-heading">
+        <h3>
+            数据库权限
+        </h3>
+        <ul class="breadcrumb">
+            <li>
+                <a href="#">仪表盘</a>
+            </li>
+            <li class="active"> 数据库权限 </li>
+        </ul>
+    </div>
+    <!-- page heading end-->
+            <div class="wrapper">
+            <div class="row">
+                <div class="col-md-6">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            申请数据库权限
+                        </header>
+                        <div class="panel-body">
+                            {% if emg %}
+                                <div class="alert alert-warning fade in">
+                                <button type="button" class="close close-sm" data-dismiss="alert">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                                <strong>Warning! </strong> {{ emg }}
+                            </div>
+                            {% endif %}
+                            {% if smg %}
+                                <div class="alert alert-success fade in">
+                                <button type="button" class="close close-sm" data-dismiss="alert">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                                <strong>Sucess! </strong> {{ smg }}
+                            </div>
+                            {% endif %}
+                             <form action="{% url 'common_db' %}" class="form-horizontal adminex-form cmxform" id="commentForm" method="POST">
+                                    {% csrf_token %}
+                                 <div class="form-group ">
+                                        <label for="cname" class="control-label col-lg-2">用户名 *</label>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" id="cname" name="name" minlength="2" type="text" required />
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="cemail" class="control-label col-lg-2">IP地址 *</label>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" id="cip" name="ip" minlength="6" type="text" required />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cemail" class="control-label col-lg-2">数据库 *</label>
+                                        <div class="col-lg-8">
+                                            <select class="form-control m-bot15" name="dbname" required>
+                                                <option value="">-----------------</option>
+                                                {% for list in dev_dbname_list %}
+                                                <option value="{{ list }}">{{ list }}</option>
+                                                {% endfor %}
+                                                {% for slave_list in  slave_dbname_list %}
+                                                <option value="{{ slave_list }}">{{ slave_list }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="ccomment" class="control-label col-lg-2">备注</label>
+                                        <div class="col-lg-8">
+                                            <textarea class="form-control " id="ccomment" name="comment"></textarea>
+                                        </div>
+                                    </div>
+                                        <div class="col-lg-offset-2 col-lg-10">
+                                            <button class="btn btn-primary" type="submit">Save</button>
+                                            <button class="btn btn-default" type="button">Cancel</button>
+                                        </div>
+                                </form>
+                            </div>
+                        </section>
+                    </div>
+
+                <div class="col-md-6">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            帮助信息
+                        </header>
+                            <div class="panel-body">
+                                <div class="col-md-12">
+                                     <h5>
+                                         <p class="text-info">
+                                            用户名：
+                                        </p>
+                                     </h5>
+                                    <div class="well well-large">
+                                            用户名项不能为空，此用户名为用户姓名的全拼，是连接数据库的认证凭证！
+                                    </div>
+                                    <h5>
+                                         <p class="text-info">
+                                            IP地址：
+                                        </p>
+                                     </h5>
+                                    <div class="well well-large">
+                                            IP地址不能为空，本地有线使用10.200.1.%，无线使用10.200.4.%；虚拟机使用10.200.0.%！
+                                    </div>
+                                    <h5>
+                                         <p class="text-info">
+                                            数据库：
+                                        </p>
+                                     </h5>
+                                    <div class="well well-large">
+                                            数据库不能为空，在使用此数据库时，请在对其他开发没有影响下使用。如对数据库有其他要求，请写备注！
+                                    </div>
+                                </div>
+                            </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- database list -->
+                <div  class="row">
+                <div class="col-md-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            数据库权限列表
+                            <span class="tools pull-right">
+                                <a href="javascript:;" class="fa fa-chevron-down"></a>
+                                <a href="javascript:;" class="fa fa-times"></a>
+                                </span>
+                        </header>
+                        <div class="panel-body">
+                            <section id="flip-scroll">
+                                    <form id="search_form">
+                                        <div class="col-md-3" style="left: -15px">
+                                            <select class="form-control m-bot15" name="search_dbname"onchange="change_info()">
+                                                <option value="">--- 数据库 ---</option>
+                                                {% for list in dev_dbname_list %}
+                                                <option value="{{ list }}">{{ list }}</option>
+                                                {% endfor %}
+                                                {% for slave_list in  slave_dbname_list %}
+                                                <option value="{{ slave_list }}">{{ slave_list }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select class="form-control m-bot15" onchange="change_info()" name="search_status">
+                                                <option value="">--- 状态 ---</option>
+                                                {% for list in user_db_status %}
+                                                <option value="{{ list.0 }}">{{ list.1 }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </form>
+                                        <!--search-->
+                                        <div class="col-md-3 pull-right" >
+                                            <form role="form" action="{% url 'common_db' %}">
+                                            <div class="input-group m-bot15">
+                                                <input id="search_input" type="text" class="form-control" name="search_name">
+                                                <span class="input-group-btn">
+                                                <button class="btn btn-info" type="submit">Search!</button>
+                                                </span>
+                                            </div>
+                                            </form>
+                                        </div>
+                                <table class="table table-bordered table-striped table-condensed cf">
+                                    <thead class="cf">
+                                    <tr>
+                                        <th>用户名</th>
+                                        <th>用户IP</th>
+                                        <th class="numeric">数据库</th>
+                                        <th class="numeric">创建时间</th>
+                                        <th class="numeric">备注</th>
+                                        <th class="numeric">状态</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for list in objects %}
+                                    <tr>
+                                        <td><a href="{% url 'dbm_db_user_info' %}?name={{ list.username_id }}">{{ list.username_id }}</a></td>
+                                        <td>{{ list.use_ip }}</td>
+                                        <td class="numeric">{{ list.use_db }}</td>
+                                        <td class="numeric">{{ list.create_time }}</td>
+                                        <td class="numeric">{{ list.comment }}</td>
+                                        <td class="numeric">
+                                            {% if list.status == 1  %}
+                                            <span class="label label-primary">{{ list.status|updbm_status }}</span>
+                                            {% endif %}
+                                            {% if list.status == 2 %}
+                                            <span class="label label-success">{{ list.status|updbm_status }}</span>
+                                            {% endif %}
+                                            {% if list.status == 3 %}
+                                            <span class="label label-danger">{{ list.status|updbm_status }}</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% include "pagination.html" %}
+                            </section>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+        </div>
+    {% block footer_js %}
+        <script>
+       function change_info(){
+        var args = $("#search_form").serialize();
+        window.location = "{% url 'common_db' %}?" + args
+        }
+
+        $("#search_input").keydown(function(e){
+        if(e.keyCode==13){
+        change_info()
+        }
+        });
+        </script>
+    {% endblock %}
+{% endblock %}

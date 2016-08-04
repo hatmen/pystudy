@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+{% block head_css_js %}
+    <link href="/static/js/iCheck/skins/minimal/minimal.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/minimal/red.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/minimal/green.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/minimal/blue.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/minimal/yellow.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/minimal/purple.css" rel="stylesheet">
+
+    <link href="/static/js/iCheck/skins/square/square.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/square/red.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/square/green.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/square/blue.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/square/yellow.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/square/purple.css" rel="stylesheet">
+
+    <link href="/static/js/iCheck/skins/flat/grey.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/flat/red.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/flat/green.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/flat/blue.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/flat/yellow.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/flat/purple.css" rel="stylesheet">
+
+
+    <!--multi-select-->
+    <link rel="stylesheet" type="text/css" href="/static/js/jquery-multi-select/css/multi-select.css" />
+
+    <!--file upload-->
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-fileupload.min.css" />
+
+    <!--tags input-->
+    <link rel="stylesheet" type="text/css" href="/static/js/jquery-tags-input/jquery.tagsinput.css" />
+{% endblock %}
+{% block content %}
+    {% load mytags %}
+    <!-- page heading start-->
+    <div class="page-heading" xmlns="http://www.w3.org/1999/html">
+        <h3>
+            添加资产
+        </h3>
+        <ul class="breadcrumb">
+            <li>
+                <a href="{% url 'upops_admin' %}">仪表盘</a>
+            </li>
+            <li class=""> 资产管理 </li>
+            <li class="">
+                <a href="{% url 'asset_host' %}">查看资产 </a>
+            </li>
+            <li class="active"> 添加资产 </li>
+        </ul>
+    </div>
+    <!-- page heading end-->
+            <div class="wrapper">
+            <div class="row">
+                <div class="col-md-8">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            添加资产
+                        </header>
+                        <div class="panel-body">
+                            {% if emg %}
+                                <div class="alert alert-error fade in">
+                                <button type="button" class="close close-sm" data-dismiss="alert">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                                <strong>Waring! </strong> {{ emg }}
+                            </div>
+                            {% endif %}
+                            {% if smg %}
+                                <div class="alert alert-success fade in">
+                                <button type="button" class="close close-sm" data-dismiss="alert">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                                <strong>Sucess! </strong> {{ smg }}
+                            </div>
+                            {% endif %}
+                             <form action="{% url 'asset_add_host' %}" class="form-horizontal adminex-form cmxform" id="commentForm" method="post">
+                             {% csrf_token %}
+                                    <div class="form-group ">
+                                        <label for="cname" class="control-label col-lg-2">主机名 *</label>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" id="cname" name="hostname" placeholder="hostname" minlength="2" type="text" required />
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="cname" class="control-label col-lg-2">IP地址 *</label>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" id="cip" name="ip" placeholder="127.0.0.1" minlength="6" type="text" required/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="cname" class="control-label col-lg-2">主机端口 *</label>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" id="cport" name="port" placeholder="22" type="text" required/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cemail" class="control-label col-lg-2">IDC机房 *</label>
+                                        <div class="col-lg-8">
+                                            <select class="form-control m-bot15" name="idc" required>
+                                                <option value="">-----------------</option>
+                                                {% for idc in idc_name %}
+                                                <option value="{{ idc.id }}">{{ idc.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="cname" class="control-label col-lg-2">硬件厂商型号</label>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" id="cbrand" name="brand" placeholder="DELL R720" type="text" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="cname" class="control-label col-lg-2">CPU核数</label>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" id="ccpu" name="cpu" placeholder="24" type="text" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="cname" class="control-label col-lg-2">内存</label>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" id="cmemory" name="memory" placeholder="64G" type="text" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="cname" class="control-label col-lg-2">硬盘</label>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" id="cdisk" name="disk" placeholder="600G" type="text" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group last">
+                                        <label class="control-label col-lg-2">主机组</label>
+                                            <div class="col-lg-8">
+                                                <select name="group" class="multi-select" multiple="" id="my_multi_select3">
+                                                    {% for list in group %}
+                                                <option value="{{ list.id }}">{{ list.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cemail" class="control-label col-lg-2">系统类型 *</label>
+                                        <div class="col-lg-8">
+                                            <select class="form-control m-bot15" name="system_type" required >
+                                                <option value="">-----------------</option>
+                                                {% for list in system_types %}
+										        <option value="{{ list.1 }}">{{ list.1 }}</option>
+										        {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="cname" class="control-label col-lg-2">系统版本号</label>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" id="csystem_version" name="system_version" placeholder="Centos6.6" type="text" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="cname" class="control-label col-lg-2">机柜号</label>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" id="ccabinet" name="cabinet" placeholder="U7" type="text" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="cname" class="control-label col-lg-2">SN号</label>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" id="csn" name="sn" placeholder="XXXXX" type="text" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="cname" class="control-label col-lg-2">资产编码号</label>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" id="cnumber" name="number" placeholder="XXXXX" type="text" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cemail" class="control-label col-lg-2">运行环境 *</label>
+                                        <div class="col-lg-8">
+                                            <select class="form-control m-bot15" name="env" required>
+                                                <option value="">-----------------</option>
+                                                {% for list in asset_envs %}
+										        <option value="{{ list.0 }}">{{ list.1 }}</option>
+										        {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cemail" class="control-label col-lg-2">资产类型 *</label>
+                                        <div class="col-lg-8">
+                                            <select class="form-control m-bot15" name="asset_type" required>
+                                                <option value="">-----------------</option>
+                                                {% for list in asset_types %}
+										        <option value="{{ list.0 }}">{{ list.1 }}</option>
+										        {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="ccomment" class="control-label col-lg-2">备注</label>
+                                        <div class="col-lg-8">
+                                            <textarea class="form-control " id="ccomment" name="comment"></textarea>
+                                        </div>
+                                    </div>
+                                        <div class="col-lg-offset-2 col-lg-10">
+                                            <button class="btn btn-primary" type="submit">Save</button>
+                                        </div>
+                                </form>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+{% endblock %}
+{% block footer_js %}
+        <!--icheck -->
+    <script src="/static/js/iCheck/jquery.icheck.js"></script>
+    <script src="/static/js/icheck-init.js"></script>
+    <!--multi-select-->
+    <script type="text/javascript" src="/static/js/jquery-multi-select/js/jquery.multi-select.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-multi-select/js/jquery.quicksearch.js"></script>
+    <script src="/static/js/multi-select-init.js"></script>
+    <!--spinner-->
+    <script type="text/javascript" src="/static/js/fuelux/js/spinner.min.js"></script>
+    <script src="/static/js/spinner-init.js"></script>
+    <!--file upload-->
+    <script type="text/javascript" src="/static/js/bootstrap-fileupload.min.js"></script>
+    <!--tags input-->
+    <script src="/static/js/jquery-tags-input/jquery.tagsinput.js"></script>
+    <script src="/static/js/tagsinput-init.js"></script>
+    <!--bootstrap input mask-->
+    <script type="text/javascript" src="/static/js/bootstrap-inputmask/bootstrap-inputmask.min.js"></script>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "upauto/host_init.html" %}
+{% block auto_css_js %}
+    <!--multi-select-->
+    <link rel="stylesheet" type="text/css" href="/static/js/jquery-multi-select/css/multi-select.css" />
+{% endblock %}
+
+{% block section-content %}
+    <section class="panel">
+         <header class="panel-heading">
+             部署Tomcat
+             <span class="tools pull-right">
+                <a href="javascript:;" class="fa fa-chevron-down"></a>
+                <a href="javascript:;" class="fa fa-times"></a>
+             </span>
+         </header>
+        <div class="panel-body">
+                <form action="{% url 'auto_tomccat_install' %}" class="form-horizontal adminex-form cmxform" id="commentForm" method="POST">
+                    {% csrf_token %}
+                        <div class="form-group last">
+                            <label class="control-label col-lg-2">主机 *</label>
+                                <div class="col-lg-8">
+                                    <select name="host" class="multi-select" multiple="" id="my_multi_select3" required>
+                                        {% for list in host_all %}
+                                    <option value="{{ list.id }}">{{ list.ip }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                        </div>
+                        <div class="form-group">
+                        <label class="col-sm-2 control-label">tomcat name * :</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" name="name" placeholder="tomcat-home" required>
+                            <span class="help-block">Tomcat容器安装路径为/opt/tomcat/</span>
+                        </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">webapps path:</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" name="webapp" placeholder="webapps/">
+                                <span class="help-block">webapps默认路径为tomcat容器自带的webapps下</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">logs path:</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" name="log" placeholder="logs/">
+                                <span class="help-block">logs路径默认为tomcat容器logs目录下</span>
+                            </div>
+                        </div>
+                    <div class="form-group">
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <label class="col-sm-2 col-sm-2 control-label">web port * :</label>
+                                <div class="col-lg-2">
+                                    <input type="text" class="form-control" name="web_port" placeholder="8080" required>
+                                </div>
+                                <label class="col-sm-2 col-sm-2 control-label">shutdown port * :</label>
+                                <div class="col-lg-2">
+                                    <input type="text" class="form-control" name="shutdown_port" placeholder="8005" required>
+                                </div>
+                                <label class="col-sm-2 control-label">redirect Port * :</label>
+                                <div class="col-lg-2">
+                                    <input type="text" class="form-control" name="redirect_port" placeholder="8443" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        <div class="col-lg-offset-2 col-lg-10">
+                            <button class="btn btn-primary" type="submit">Save</button>
+                        </div>
+                </form>
+        </div>
+    </section>
+{% endblock %}
+{% block auto_footer_js %}
+    <!--multi-select-->
+    <script type="text/javascript" src="/static/js/jquery-multi-select/js/jquery.multi-select.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-multi-select/js/jquery.quicksearch.js"></script>
+    <script src="/static/js/multi-select-init.js"></script>
+    <!--bootstrap input mask-->
+    <script type="text/javascript" src="/static/js/bootstrap-inputmask/bootstrap-inputmask.min.js"></script>
+{% endblock %}

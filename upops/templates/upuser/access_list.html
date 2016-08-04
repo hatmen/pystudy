@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block content %}
+    {% load mytags %}
+    <!-- page heading start-->
+    <div class="page-heading">
+        <h3>
+            添加权限
+        </h3>
+        <ul class="breadcrumb">
+            <li>
+                <a href="{% url 'upops_admin' %}">仪表盘</a>
+            </li>
+            <li class=""> 用户管理 </li>
+            <li class="active"> 查看权限 </li>
+        </ul>
+    </div>
+    <!-- page heading end-->
+            <div class="wrapper">
+
+            <!-- database list -->
+            <div  class="row">
+                <div class="col-md-10">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            权限列表
+                            <span class="tools pull-right">
+                                <a href="javascript:;" class="fa fa-chevron-down"></a>
+                                <a href="javascript:;" class="fa fa-times"></a>
+                                </span>
+                        </header>
+                        <div class="panel-body">
+                            <section id="flip-scroll">
+                                     <div class="col-md-1" style="left: -15px">
+                                        <a href="{% url 'upuser_access_add' %}" class="btn btn-success">添加权限</a>
+                                    </div>
+                                    <form id="search_form">
+                                        <div class="col-md-2">
+                                            <select class="form-control m-bot15" name="search_status" onchange="change_info()">
+                                                <option value="">--- 状态 ---</option>
+                                                {% for tuple in user_status %}
+                                                <option value="{{ tuple.0 }}">{{ tuple.1 }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <!--search-->
+                                        <div class="col-md-3 pull-right" >
+                                            <form role="form" action="{% url 'upuser_access_list' %}">
+                                            <div class="input-group m-bot15">
+                                                <input type="text" class="form-control" name="search_name" placeholder="Username">
+                                                <span class="input-group-btn">
+                                                <button class="btn btn-info" type="submit" >Search!</button>
+                                                </span>
+                                            </div>
+                                            </form>
+                                        </div>
+                                        </form>
+                                <table class="table table-bordered table-striped table-condensed cf">
+                                    <thead class="cf">
+                                    <tr>
+                                        <th>权限路径</th>
+                                        <th>说明</th>
+                                        <th class="numeric">权限管理</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for list in objects %}
+                                    <tr>
+                                        <td>{{ list.url }}</td>
+                                        <td>{{ list.comment }}</td>
+                                        <td>
+                                            <button class="btn btn-danger btn-xs" onclick="revoke('{{ list.url }}')">删除</button>
+                                            <a href="{% url 'upuser_access_edit' %}?url={{ list.url }}">
+                                                <button class="btn btn-success btn-xs"> 编辑</button>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% include "pagination.html" %}
+                            </section>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            </div>
+    {% endblock %}
+    {% block footer_js %}
+        <script src="/static/js/checkbox.js"></script>
+        <script>
+        function change_info(){
+        var args = $("#search_form").serialize();
+        window.location = "{% url 'dbm_user_info' %}?" + args
+        }
+
+        $("#search_input").keydown(function(e){
+        if(e.keyCode==13){
+        change_info()
+        }
+        });
+
+	    function revoke(url)
+        {
+            if (confirm("你确定要对"+url+"操作?"))
+                {
+                    var url = "{% url 'upuser_access_del' %}?&url="+url
+                    $.ajax({
+                        cache:false,
+                        url:url,
+                        type:"get",
+                        success:function(html){
+                            location.reload();
+                        }
+                    });
+                }
+        }
+        </script>
+{% endblock %}

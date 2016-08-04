@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+{% block content %}
+    {% load mytags %}
+    <!-- page heading start-->
+    <div class="page-heading">
+        <h3>
+            用户管理
+        </h3>
+        <ul class="breadcrumb">
+            <li>
+                <a href="{% url 'upops_admin' %}">仪表盘</a>
+            </li>
+            <li class=""> 数据库管理 </li>
+            <li class="active"> 用户管理 </li>
+        </ul>
+    </div>
+    <!-- page heading end-->
+            <div class="wrapper">
+            <div class="row">
+                <div class="col-md-6">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            添加数据库用户
+                        </header>
+                        <div class="panel-body">
+                            {% if emg %}
+                                <div class="alert alert-warning fade in">
+                                <button type="button" class="close close-sm" data-dismiss="alert">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                                <strong>Warning! </strong> {{ emg }}
+                            </div>
+                            {% endif %}
+                            {% if smg %}
+                                <div class="alert alert-success fade in">
+                                <button type="button" class="close close-sm" data-dismiss="alert">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                                <strong>Sucess! </strong> {{ smg }}
+                            </div>
+                            {% endif %}
+                             <form class="cmxform form-horizontal adminex-form" id="commentForm" method="POST" action="{% url 'dbm_db_user' %}">
+                                 {% csrf_token %}
+                                 <div class="form-group ">
+                                        <label for="cname" class="control-label col-lg-2">用户名 *</label>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" id="cname" name="name" minlength="2" type="text" required />
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="cemail" class="control-label col-lg-2">邮箱 *</label>
+                                        <div class="col-lg-8">
+                                            <input class="form-control " id="exampleInputEmail1" type="email" name="email" required />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cemail" class="control-label col-lg-2">状态 *</label>
+                                        <div class="col-lg-8">
+                                            <select class="form-control m-bot15" name="status" required>
+                                                <option value="">-----------------</option>
+                                                {% for tuple in user_status %}
+                                                <option value="{{ tuple.0 }}">{{ tuple.1 }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="ccomment" class="control-label col-lg-2">备注</label>
+                                        <div class="col-lg-8">
+                                            <textarea class="form-control " id="ccomment" name="comment"></textarea>
+                                        </div>
+                                    </div>
+                                        <div class="col-lg-offset-2 col-lg-10">
+                                            <button class="btn btn-primary" type="submit">Save</button>
+                                            <button class="btn btn-default" type="button">Cancel</button>
+                                        </div>
+                                </form>
+                            </div>
+                        </section>
+                    </div>
+                <div class="col-md-6">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            帮助信息
+                        </header>
+                            <div class="panel-body">
+                                <div class="col-md-12">
+                                     <h5>
+                                         <p class="text-info">
+                                            用户名：
+                                        </p>
+                                     </h5>
+                                    <div class="well well-large">
+                                            用户名项不能为空，此用户名为用户姓名的全拼，是连接数据库的认证凭证！
+                                            如果是虚拟机则用户名为xs加IP最后一位！
+                                    </div>
+                                    <h5>
+                                         <p class="text-info">
+                                            邮箱：
+                                        </p>
+                                     </h5>
+                                    <div class="well well-large">
+                                            邮箱为用户注册时提供，是发送用户密码所用；如果用户名为虚拟机，则邮箱可以填写其他能用的邮箱地址！
+                                    </div>
+                                    <h5>
+                                         <p class="text-info">
+                                            状态：
+                                        </p>
+                                     </h5>
+                                    <div class="well well-large">
+                                            用户使用状态，状态分为启用，禁用两种！
+                                    </div>
+                                </div>
+                            </div>
+                    </section>
+                </div>
+
+            </div>
+
+            <!-- database list -->
+            <div  class="row">
+                <div class="col-md-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            用户查询
+                            <span class="tools pull-right">
+                                <a href="javascript:;" class="fa fa-chevron-down"></a>
+                                <a href="javascript:;" class="fa fa-times"></a>
+                                </span>
+                        </header>
+                        <div class="panel-body">
+                            <section id="flip-scroll">
+                                    <form id="search_form">
+                                        <div class="col-md-2" style="left: -15px">
+                                            <select class="form-control m-bot15" name="search_status" onchange="change_info()">
+                                                <option value="">--- 状态 ---</option>
+                                                {% for tuple in user_status %}
+                                                <option value="{{ tuple.0 }}">{{ tuple.1 }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <!--search-->
+                                        <div class="col-md-3 pull-right" >
+                                            <form role="form" action="{% url 'dbm_db_user' %}">
+                                            <div class="input-group m-bot15">
+                                                <input type="text" class="form-control" name="search_name" placeholder="Username">
+                                                <span class="input-group-btn">
+                                                <button class="btn btn-info" type="submit" >Search!</button>
+                                                </span>
+                                            </div>
+                                            </form>
+                                        </div>
+                                        </form>
+                                <table class="table table-bordered table-striped table-condensed cf">
+                                    <thead class="cf">
+                                    <tr>
+                                        <th>用户名</th>
+                                        <th>邮箱</th>
+                                        <th class="numeric">密码</th>
+                                        <th class="numeric">创建时间</th>
+                                        <th class="numeric">状态</th>
+                                        <th class="numeric">权限管理</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for list in objects %}
+                                    <tr>
+                                        <td>{{ list.name }}</td>
+                                        <td>{{ list.email }}</td>
+                                        <td class="numeric">{{ list.password }}</td>
+                                        <td class="numeric">{{ list.create_time }}</td>
+                                        <td class="numeric">
+                                            {% if list.role == 1 %}
+                                            <span class="label label-success">{{ list.role|upuser_status }}</span>
+                                            {% endif %}
+                                            {% if list.role == 2 %}
+                                             <span class="label label-danger">{{ list.role|upuser_status }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-danger btn-xs" onclick="revoke('{{ list.name }}', '')">删除</button>
+                                            <button class="btn btn-success btn-xs" onclick="revoke('{{ list.name }}', 1)">启用</button>
+                                            <button class="btn btn-primary btn-xs" onclick="revoke('{{ list.name }}', 2)">禁用</button>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% include "pagination.html" %}
+                            </section>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            </div>
+    {% endblock %}
+    {% block footer_js %}
+        <script src="/static/js/checkbox.js"></script>
+        <script>
+        function change_info(){
+        var args = $("#search_form").serialize();
+        window.location = "{% url 'dbm_user_info' %}?" + args
+        }
+
+        $("#search_input").keydown(function(e){
+        if(e.keyCode==13){
+        change_info()
+        }
+        });
+
+	    function revoke(username,role)
+        {
+            if (confirm("你确定要对"+username+"用户操作?"))
+                {
+                    var url = "{%  url 'dbm_db_revoke' %}?&username="+username+"&status="+role+"&ip=%"
+                    $.ajax({
+                        cache:false,
+                        url:url,
+                        type:"get",
+                        success:function(html){
+                            location.reload();
+                        }
+                    });
+                }
+        }
+        </script>
+{% endblock %}

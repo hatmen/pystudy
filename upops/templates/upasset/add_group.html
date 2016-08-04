@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block head_css_js %}
+    <link href="/static/js/iCheck/skins/minimal/minimal.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/minimal/red.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/minimal/green.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/minimal/blue.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/minimal/yellow.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/minimal/purple.css" rel="stylesheet">
+
+    <link href="/static/js/iCheck/skins/square/square.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/square/red.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/square/green.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/square/blue.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/square/yellow.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/square/purple.css" rel="stylesheet">
+
+    <link href="/static/js/iCheck/skins/flat/grey.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/flat/red.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/flat/green.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/flat/blue.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/flat/yellow.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/flat/purple.css" rel="stylesheet">
+
+
+    <!--multi-select-->
+    <link rel="stylesheet" type="text/css" href="/static/js/jquery-multi-select/css/multi-select.css" />
+
+    <!--file upload-->
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-fileupload.min.css" />
+
+    <!--tags input-->
+    <link rel="stylesheet" type="text/css" href="/static/js/jquery-tags-input/jquery.tagsinput.css" />
+{% endblock %}
+{% block content %}
+    {% load mytags %}
+    <!-- page heading start-->
+    <div class="page-heading" xmlns="http://www.w3.org/1999/html">
+        <h3>
+            添加主机组
+        </h3>
+        <ul class="breadcrumb">
+            <li>
+                <a href="{% url 'upops_admin' %}">仪表盘</a>
+            </li>
+            <li class=""> URL管理 </li>
+            <li class="">
+                <a href="{% url 'asset_group' %}">查看主机组</a>
+            </li>
+            <li class="active">添加主机组</li>
+        </ul>
+    </div>
+    <!-- page heading end-->
+            <div class="wrapper">
+            <div class="row">
+                <div class="col-md-8">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            添加主机组
+                        </header>
+                        <div class="panel-body">
+                            {% if emg %}
+                                <div class="alert alert-warning fade in">
+                                <button type="button" class="close close-sm" data-dismiss="alert">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                                <strong>Warning! </strong> {{ emg }}
+                            </div>
+                            {% endif %}
+                            {% if smg %}
+                                <div class="alert alert-success fade in">
+                                <button type="button" class="close close-sm" data-dismiss="alert">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                                <strong>Sucess! </strong> {{ smg }}
+                            </div>
+                            {% endif %}
+                             <form action="{% url 'asset_add_group' %}" class="form-horizontal adminex-form cmxform" id="commentForm" method="post">
+                             {% csrf_token %}
+                                    <div class="form-group ">
+                                        <label for="cname" class="control-label col-lg-2">组名 *</label>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" id="cname" name="name" minlength="2" type="text" required />
+                                        </div>
+                                    </div>
+                                    <div class="form-group last">
+                                        <label class="control-label col-lg-2">主机</label>
+                                            <div class="col-lg-8">
+                                                <select name="host" class="multi-select" multiple="" id="my_multi_select3">
+                                                    {% for list in host_all %}
+                                                <option value="{{ list.id }}">{{ list.hostname }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="ccomment" class="control-label col-lg-2">备注</label>
+                                        <div class="col-lg-8">
+                                            <textarea class="form-control " id="ccomment" name="comment"></textarea>
+                                        </div>
+                                    </div>
+                                        <div class="col-lg-offset-2 col-lg-10">
+                                            <button class="btn btn-primary" type="submit">Save</button>
+                                        </div>
+                                </form>
+                            </div>
+                        </section>
+                    </div>
+
+
+                </div>
+            </div>
+{% endblock %}
+    {% block footer_js %}
+        <!--icheck -->
+    <script src="/static/js/iCheck/jquery.icheck.js"></script>
+    <script src="/static/js/icheck-init.js"></script>
+    <!--multi-select-->
+    <script type="text/javascript" src="/static/js/jquery-multi-select/js/jquery.multi-select.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-multi-select/js/jquery.quicksearch.js"></script>
+    <script src="/static/js/multi-select-init.js"></script>
+    <!--spinner-->
+    <script type="text/javascript" src="/static/js/fuelux/js/spinner.min.js"></script>
+    <script src="/static/js/spinner-init.js"></script>
+    <!--file upload-->
+    <script type="text/javascript" src="/static/js/bootstrap-fileupload.min.js"></script>
+    <!--tags input-->
+    <script src="/static/js/jquery-tags-input/jquery.tagsinput.js"></script>
+    <script src="/static/js/tagsinput-init.js"></script>
+    <!--bootstrap input mask-->
+    <script type="text/javascript" src="/static/js/bootstrap-inputmask/bootstrap-inputmask.min.js"></script>
+    {% endblock %}

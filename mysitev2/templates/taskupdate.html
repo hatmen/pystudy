@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+		{% block head %}
+        <title>定时任务</title>
+        <!-- Bootstrap -->
+        <link href="/demo/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="/demo/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+        <link href="/demo/assets/styles.css" rel="stylesheet" media="screen">
+        <script src="/demo/vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+		{% endblock %}
+		
+		{% block task %} class="active" {% endblock %}
+		
+		{% block span %}
+
+                     <!--/span-->
+                    <div class="span9" id="content">
+                    <div class="row-fluid">
+                         <!-- block -->
+                        <div class="block">
+                            <div class="navbar navbar-inner block-header">
+                                <div class="muted pull-left">修改 {{ task_info.file_name }}</div>
+                                <!-- <div class="muted pull-right ">
+                                <button style="margin-top: -5px;" id='add_sheet' class="btn btn-success">Add Sheet <i class="icon-plus icon-white"></i></button>
+                                </div> -->
+                            </div>
+                            <div class="block-content collapse in">
+                                <div class="span12">
+					<!-- BEGIN FORM-->
+					<form action="/demo/taskupdate/" id="form_sample_1" method="get" class="form-horizontal">
+						<fieldset>
+  							<div class="control-group">
+  								<label class="control-label">任务名称<span class="required">*</span></label>
+  								<div class="controls">
+                                    <input type="hidden" value="{{ task_info.only_id }}" name="task_id" data-required="1" class="span6 m-wrap"/>
+  									<input type="text" value="{{ task_info.file_name }}" name="taskname" data-required="1" class="span6 m-wrap"/>
+  								</div>
+  							</div>
+                            {% for list in task_sql_list %}
+                            <div class="control-group">
+  								<label class="control-label">首行格式</label>
+  								<div class="controls">
+                                    <input type="hidden" value="{{ list.id }}" name="crontab_id" data-required="1" class="span6 m-wrap"/>
+  									<input type="text" value="{{ list.top_line }}" name="toplineformat" data-required="1" class="span6 m-wrap"/>
+                                    <span class="help-block">e.g：excel中sheet首行内容，多个以","分割</span>
+  								</div>
+  							</div>
+                            <div id="tail_sql" class="control-group">
+                                <label class="control-label">SQL语句<span class="required">*</span></label>
+                                <div class="controls">
+                                    <textarea type="text" name="sqlmessage" rows="10"  class="span6 m-wrap">{{ list.task_sql }}</textarea>
+                                </div>
+                            </div>
+                            {% endfor %}
+  							<div class="control-group">
+  								<label class="control-label">收件人<span class="required">*</span></label>
+  								<div class="controls">
+  									<input value="{{ task_info.task_email }}" name="mailuser" type="text" class="span6 m-wrap"/>
+                                    <span class="help-block">e.g：多个收件人邮箱以","分割</span>
+  								</div>
+  							</div>
+                            <div class="control-group">
+  								<label class="control-label">邮件主题<span class="required">*</span></label>
+  								<div class="controls">
+  									<input type="text" value="{{ task_info.email_subject }}" name="mailsubject" data-required="1" class="span6 m-wrap"/>
+  								</div>
+  							</div>
+                            <div class="control-group">
+                                <label class="control-label">邮件内容<span class="required">*</span></label>
+                                <div class="controls">
+                                    <textarea type="text" name="mailcontext" rows="5" class="span6 m-wrap">{{ task_info.email_context }}</textarea>
+                                </div>
+                            </div>
+                            <div class="control-group">
+  								<label class="control-label">任务时间<span class="required">*</span></label>
+  								<div class="controls">
+  									<input type='text' value="{{ task_info.email_crontab }}" name="tasktime" data-required="1" class="span6 m-wrap"/>
+  								</div>
+  							</div>
+                            <div class="control-group">
+                                          <label class="control-label" for="optionsCheckbox">ON/OFF</label>
+                                          <div class="controls">
+                                              {% if status %}
+                                              <input class="uniform" type="checkbox" name="checkbox" checked id="optionsCheckbox" value="1">
+                                              {% else %}
+                                              <input class="uniform" type="checkbox" name="checkbox" id="optionsCheckbox" value="1">
+                                              {% endif %}
+                                          </div>
+                            </div>
+                        <div class="form-actions">
+  								<button type="submit" class="btn btn-primary">Save</button>
+  								<a href="/demo/taskshow/"><button type="button" class="btn">Cancel</button></a>
+                        </div>
+						</fieldset>
+					</form>
+
+{% endblock %}
+{% block script %}
+        <!--/.fluid-container-->
+        <script src="/demo/vendors/jquery-1.9.1.min.js"></script>
+        <script src="/demo/bootstrap/js/bootstrap.min.js"></script>
+        <script src="/demo/vendors/easypiechart/jquery.easy-pie-chart.js"></script>
+        <script src="/demo/assets/scripts.js"></script>
+{% endblock %}

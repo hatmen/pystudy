@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block content %}
+    <!-- page heading start-->
+    <div class="page-heading">
+        <h3>
+            权限管理
+        </h3>
+        <ul class="breadcrumb">
+            <li>
+                <a href="{% url 'common_index' %}">仪表盘</a>
+            </li>
+            <li class=""> 数据库管理 </li>
+            <li class="active"> 权限管理 </li>
+        </ul>
+    </div>
+    <!-- page heading end-->
+            <div class="wrapper">
+            <!-- database and user list -->
+            <div  class="row">
+                <div class="col-md-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            数据库权限列表
+                            <span class="tools pull-right">
+                                <a href="javascript:;" class="fa fa-chevron-down"></a>
+                                <a href="javascript:;" class="fa fa-times"></a>
+                                </span>
+                        </header>
+                        <div class="panel-body">
+                            <section id="flip-scroll">
+                                    <form id="search_form">
+                                        <div class="col-md-3" style="left: -15px">
+                                            <select class="form-control m-bot15" onchange="change_info()">
+                                                <option value="">--- 数据库 ---</option>
+                                                <option>xs_test_252_20160309</option>
+                                                <option>xs_test_252_20160310</option>
+                                                <option>xs_test_252_20160311</option>
+                                                <option>xs_test_252_20160312</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select class="form-control m-bot15" onchange="change_info()">
+                                                <option value="">--- 状态 ---</option>
+                                                <option>已提交</option>
+                                                <option>已通过</option>
+                                                <option>已驳回</option>
+                                            </select>
+                                        </div>
+                                        <!--search-->
+                                        <div class="col-md-3 pull-right" >
+                                        <div class="input-group m-bot15">
+                                                <input type="text" class="form-control">
+                                                <span class="input-group-btn">
+                                                <button class="btn btn-info" type="button" onchange="change_info()">Search!</button>
+                                                </span>
+                                        </div>
+                                        </div>
+                                        </form>
+                                <table class="table table-bordered table-striped table-condensed cf">
+                                    <thead class="cf">
+                                    <tr>
+                                        <th>用户名</th>
+                                        <th>用户IP</th>
+                                        <th class="numeric">数据库</th>
+                                        <th class="numeric">创建时间</th>
+                                        <th class="numeric">备注</th>
+                                        <th class="numeric">状态</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>wangyajun</td>
+                                        <td>10.200.1.%</td>
+                                        <td class="numeric">xs_test_251_20160309</td>
+                                        <td class="numeric">2016-03-09 12:11:30</td>
+                                        <td class="numeric">此数据库只对开发做使用</td>
+                                        <td class="numeric">
+                                            <span class="label label-primary">已提交</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>wangyajun</td>
+                                        <td>10.200.1.%</td>
+                                        <td class="numeric">xs_test_251_20160309</td>
+                                        <td class="numeric">2016-03-09 12:11:30</td>
+                                        <td class="numeric">此数据库只对开发做使用</td>
+                                        <td class="numeric">
+                                            <span class="label label-success">已通过</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>wangyajun</td>
+                                        <td>10.200.1.%</td>
+                                        <td class="numeric">xs_test_251_20160309</td>
+                                        <td class="numeric">2016-03-09 12:11:30</td>
+                                        <td class="numeric">此数据库只对开发做使用</td>
+                                        <td class="numeric">
+                                            <span class="label label-danger">已驳回</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>wangyajun</td>
+                                        <td>10.200.1.%</td>
+                                        <td class="numeric">xs_test_251_20160309</td>
+                                        <td class="numeric">2016-03-09 12:11:30</td>
+                                        <td class="numeric">此数据库只对开发做使用</td>
+                                        <td class="numeric">
+                                            <span class="label label-success">已通过</span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                {% include "pagination.html" %}
+                            </section>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            </div>
+{% endblock %}

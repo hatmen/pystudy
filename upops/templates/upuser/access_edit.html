@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block head_css_js %}
+    <!--multi-select-->
+    <link rel="stylesheet" type="text/css" href="/static/js/jquery-multi-select/css/multi-select.css" />
+{% endblock %}
+{% block content %}
+    {% load mytags %}
+    <!-- page heading start-->
+    <div class="page-heading">
+        <h3>
+            编辑权限
+        </h3>
+        <ul class="breadcrumb">
+            <li>
+                <a href="{% url 'upops_admin' %}">仪表盘</a>
+            </li>
+            <li class=""> 用户管理 </li>
+            <li class="active"> 查看权限 </li>
+        </ul>
+    </div>
+    <!-- page heading end-->
+            <div class="wrapper">
+            <div class="row">
+                <div class="col-md-8">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            编辑权限
+                        </header>
+                        <div class="panel-body">
+                            {% if emg %}
+                                <div class="alert alert-warning fade in">
+                                <button type="button" class="close close-sm" data-dismiss="alert">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                                <strong>Warning! </strong> {{ emg }}
+                            </div>
+                            {% endif %}
+                            {% if smg %}
+                                <div class="alert alert-success fade in">
+                                <button type="button" class="close close-sm" data-dismiss="alert">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                                <strong>Sucess! </strong> {{ smg }}
+                            </div>
+                            {% endif %}
+                             <form class="cmxform form-horizontal adminex-form" id="commentForm" method="POST" action="{% url 'upuser_access_edit' %}">
+                                 {% csrf_token %}
+                                 <div class="form-group">
+                                        <label for="cname" class="control-label col-lg-2">URL路径 *</label>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" value="{{ url_info.url }}" name="url" minlength="2" id="cname" type="text" readonly/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group last">
+                                        <label class="control-label col-lg-2">用户</label>
+                                            <div class="col-lg-8">
+                                                <select name="username" class="multi-select" multiple="" id="my_multi_select1">
+                                                    {% for user in user_all %}
+                                                        {% if url_info in user.url.all %}
+                                                        <option selected value="{{ user.username }}">{{ user.username }}</option>
+                                                        {% else %}
+                                                        <option value="{{ user.username}}">{{ user.username }}</option>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="cname" class="control-label col-lg-2">说明</label>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" id="cname" value="{{ url_info.comment }}" name="comment" minlength="2" type="text" />
+                                        </div>
+                                    </div>
+                                        <div class="col-lg-offset-2 col-lg-10">
+                                            <button class="btn btn-primary" type="submit">Save</button>
+                                            <button class="btn btn-default" type="button">Cancel</button>
+                                        </div>
+                                </form>
+                            </div>
+                        </section>
+                    </div>
+            </div>
+            </div>
+            </div>
+    {% endblock %}
+    {% block footer_js %}
+        <!--multi-select-->
+        <script type="text/javascript" src="/static/js/jquery-multi-select/js/jquery.multi-select.js"></script>
+        <script type="text/javascript" src="/static/js/jquery-multi-select/js/jquery.quicksearch.js"></script>
+        <script src="/static/js/multi-select-init.js"></script>
+        <script src="/static/js/checkbox.js"></script>
+        <script>
+        function change_info(){
+        var args = $("#search_form").serialize();
+        window.location = "{% url 'dbm_user_info' %}?" + args
+        }
+
+        $("#search_input").keydown(function(e){
+        if(e.keyCode==13){
+        change_info()
+        }
+        });
+
+	    function revoke(username,role)
+        {
+            if (confirm("你确定要对"+username+"用户操作?"))
+                {
+                    var url = "{%  url 'dbm_db_revoke' %}?&username="+username+"&status="+role+"&ip=%"
+                    $.ajax({
+                        cache:false,
+                        url:url,
+                        type:"get",
+                        success:function(html){
+                            location.reload();
+                        }
+                    });
+                }
+        }
+        </script>
+{% endblock %}

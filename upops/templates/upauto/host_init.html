@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block head_css_js %}
+    {% block auto_css_js %}{% endblock %}
+{% endblock %}
+{% block content %}
+    <!-- page heading start-->
+    <div class="page-heading">
+        <h3>
+            {{ page_name }}
+        </h3>
+        <ul class="breadcrumb">
+            <li>
+                <a href="{% url 'upops_admin' %}">仪表盘</a>
+            </li>
+            <li>自动部署</li>
+            <li class="active"> {{ page_name }} </li>
+        </ul>
+    </div>
+    <!-- page heading end-->
+            <div class="wrapper">
+            <div class="row">
+                <div class="col-md-10">
+                        {% block section-content %}{% endblock %}
+                    </div>
+            </div>
+
+            <!-- database list -->
+            <div  class="row">
+                <div class="col-md-10">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            互信列表
+                            <span class="tools pull-right">
+                                <a href="javascript:;" class="fa fa-chevron-down"></a>
+                                <a href="javascript:;" class="fa fa-times"></a>
+                                </span>
+                        </header>
+                        <div class="panel-body">
+                            <section id="flip-scroll">
+                                    <form id="search_form">
+                                        <!--search-->
+                                        <div class="col-md-3 pull-right" >
+                                            <form role="form" action="{%  url 'map_info' %}">
+                                            <div class="input-group m-bot15">
+                                                <input type="text" class="form-control" name="searchname" placeholder="Username">
+                                                <span class="input-group-btn">
+                                                <button class="btn btn-info" type="submit" >Search!</button>
+                                                </span>
+                                            </div>
+                                            </form>
+                                        </div>
+                                        </form>
+                                <table class="table table-bordered table-striped table-condensed cf">
+                                    <thead class="cf">
+                                    <tr>
+                                        <th>主机IP</th>
+                                        <th>端口</th>
+                                        <th class="numeric">用户名</th>
+                                        <th class="numeric">创建时间</th>
+                                        <th class="numeric">状态</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for list in objects %}
+                                    <tr>
+                                        <td>{{ list.ip }}</td>
+                                        <td>{{ list.port }}</td>
+                                        <td class="numeric">{{ list.user }}</td>
+                                        <td class="numeric">{{ list.date_added }}</td>
+                                        <td>
+                                            <button class="btn btn-danger btn-xs" onclick="delurl('{{ list.id }}','{{ list.interior_url }}')">删除</button>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% include "pagination.html" %}
+                            </section>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            </div>
+    {% endblock %}
+    {% block footer_js %}
+        <script src="/static/js/checkbox.js"></script>
+            {% block auto_footer_js %}{% endblock %}
+{% endblock %}

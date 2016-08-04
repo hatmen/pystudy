@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block content %}
+    {% load mytags %}
+    <!-- page heading start-->
+    <div class="page-heading">
+        <h3>
+           查看主机
+        </h3>
+        <ul class="breadcrumb">
+            <li>
+                <a href="{% url 'upops_admin' %}">仪表盘</a>
+            </li>
+            <li class=""> 资产管理 </li>
+            <li class="active"> 添加资产 </li>
+        </ul>
+    </div>
+    <!-- page heading end-->
+            <div class="wrapper">
+            <!-- url list -->
+            <div  class="row">
+                <div class="col-md-10">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            添加资产列表信息
+                            <span class="tools pull-right">
+                                <a href="javascript:;" class="fa fa-chevron-down"></a>
+                                <a href="javascript:;" class="fa fa-times"></a>
+                                </span>
+                        </header>
+                        <div class="panel-body">
+                            <section id="flip-scroll">
+                                    <div class="col-lg-1" style="left: -15px">
+                                        <a href="{% url 'asset_add_host' %}" class="btn btn-success">添加资产</a>
+                                    </div>
+                                    <form id="search_form">
+                                        <div class="col-md-2">
+                                            <select class="form-control m-bot15" name="search_idc"onchange="change_info()">
+                                                <option value="">--- 机房 ---</option>
+                                                {% for list in idc %}
+                                                <option value="{{ list.id }}">{{ list.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3" style="left: -25px">
+                                            <select class="form-control m-bot15" onchange="change_info()" name="search_group">
+                                                <option value="">--- 主机组 ---</option>
+                                                {% for list in asset_group %}
+                                                <option value="{{ list.id }}">{{ list.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3" style="left: -25px">
+                                            <select class="form-control m-bot15" onchange="change_info()" name="search_type">
+                                                <option value="">--- 资产类型 ---</option>
+                                                {% for list in asset_type %}
+                                                <option value="{{ list.0 }}">{{ list.1 }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </form>
+                                    <form action='{% url 'asset_host' %}'>
+                                        <div class="col-md-3 pull-right" >
+                                            <div class="input-group m-bot15">
+                                                <input type="text" class="form-control" name="search_name" placeholder="hostname">
+                                                <span class="input-group-btn">
+                                                <button class="btn btn-info" type="submit" >Search!</button>
+                                                </span>
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                <table class="table table-bordered table-striped table-condensed cf">
+                                    <thead class="cf">
+                                    <tr>
+                                        <th class="text-center">主机名</th>
+                                        <th class="text-center">IP地址</th>
+                                        <th class="text-center">端口</th>
+                                        <th class="text-center">IDC</th>
+                                        <th class="text-center">所属主机组</th>
+                                        <th class="text-center numeric">SN号</th>
+                                        <th class="text-center numeric">操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for list in objects %}
+                                    <tr>
+                                        <td class="text-center"><a href="#">{{ list.hostname }}</a></td>
+                                        <td class="text-center">{{ list.ip }}</td>
+                                        <td class="text-center">{{ list.port }}</td>
+                                        <td class="text-center">{{ list.idc.name }}</td>
+                                        <td class="numeric">{{ list.group.all|group_str2 }}</td>
+                                        <td class="text-center">{{ list.sn }}</td>
+                                        <td class="text-center">
+                                            <a class="btn btn-danger btn-xs" href="{% url 'asset_host_del' %}?host_id={{ list.id }}">删除</a>
+                                            <a class="btn btn-success btn-xs" href="{% url 'asset_host_edit' %}?id={{ list.id }}">编辑</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% include "pagination.html" %}
+                            </section>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            </div>
+    {% block footer_js %}
+        <script>
+        function change_info(){
+        var args = $("#search_form").serialize();
+        window.location = "{% url 'asset_host' %}?" + args;
+{#            location.reload();#}
+        }
+
+        $("#search_input").keydown(function(e){
+        if(e.keyCode==13){
+        change_info()
+        }
+        });
+        </script>
+    {% endblock %}
+{% endblock %}

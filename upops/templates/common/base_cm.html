@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="keywords" content="admin, dashboard, bootstrap, template, flat, modern, theme, responsive, fluid, retina, backend, html5, css, css3">
+  <meta name="description" content="">
+  <meta name="author" content="ThemeBucket">
+  <link rel="shortcut icon" href="#" type="/static/image/png">
+
+  <title>UPOPS</title>
+
+    {% include "link_css.html" %}
+    {% include "head_script.html" %}
+    {% block head_css_js %} {% endblock %}
+
+</head>
+
+<body class="sticky-header">
+<section>
+    <!-- left side start-->
+    <div class="left-side sticky-left-side">
+        {% include "common/nav_cm.html" %}
+    </div>
+    <!-- left side end-->
+
+    <!-- main content start-->
+    <div class="main-content" >
+
+        <!-- header section start-->
+        <div class="header-section">
+        {% include "common/nav_header_section.html" %}
+        </div>
+        <!-- header section end-->
+
+        {% block content %}{% endblock %}
+
+        <!--footer section start-->
+        <footer>
+            2016 &copy; UPOPS by czyb360
+        </footer>
+        <!--footer section end-->
+     </div>
+    <!-- main content end-->
+</section>
+</body>
+    {% include "foot_script.html" %}
+    {% block footer_js %} {% endblock %}
+    <script>
+    var url_array = document.location.pathname.split("/");
+    s1 = url_array[1];
+    s2 = url_array[2];
+    if (s1 == ''){
+        $('#index').addClass('active')
+    } else {
+        $("#"+s1).addClass('active');
+        $('#'+s1+' .'+s2).addClass('active');
+        console.log(s2)
+    }
+</script>
+</html>

@@ -1,0 +1,77 @@
+{% extends "upauto/host_init.html" %}
+{% block auto_css_js %}
+    <!--multi-select-->
+    <link rel="stylesheet" type="text/css" href="/static/js/jquery-multi-select/css/multi-select.css" />
+
+    <!--tags input-->
+    <link rel="stylesheet" type="text/css" href="/static/js/jquery-tags-input/jquery.tagsinput.css" />
+{% endblock %}
+
+{% block section-content %}
+    <section class="panel">
+         <header class="panel-heading">
+             软件安装
+             <span class="tools pull-right">
+                <a href="javascript:;" class="fa fa-chevron-down"></a>
+                <a href="javascript:;" class="fa fa-times"></a>
+             </span>
+         </header>
+        <div class="panel-body">
+                <form action="{% url 'auto_soft_install' %}" class="form-horizontal adminex-form cmxform" id="commentForm" method="POST">
+                    {% csrf_token %}
+                        <div class="form-group last">
+                            <label class="control-label col-lg-2">主机 *</label>
+                                <div class="col-lg-8">
+                                    <select name="host" class="multi-select" multiple="" id="my_multi_select3" required>
+                                        {% for list in host_all %}
+                                    <option value="{{ list.id }}">{{ list.ip }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                        </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">Yum install *</label>
+                                <div class="col-md-10">
+                                    <input id="tags_2" type="text" name="soft" class="tags"/>
+                                </div>
+                            </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">常规软件</label>
+                            <div class="col-md-10 icheck ">
+                                <div class="minimal single-row">
+                                    <div class="checkbox ">
+                                        <input type="checkbox" name="checkbox" value="jdk">
+                                        <label>安装 JDK </label>
+                                    </div>
+                                    <div class="checkbox ">
+                                        <input type="checkbox" name="checkbox" value="nginx">
+                                        <label>安装 Nginx </label>
+                                    </div>
+                                    <div class="checkbox ">
+                                        <input type="checkbox" name="checkbox" value="redis">
+                                        <label>安装 Redis </label>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                        <div class="col-lg-offset-2 col-lg-10">
+                            <button class="btn btn-primary" type="submit">Save</button>
+                        </div>
+                </form>
+        </div>
+    </section>
+{% endblock %}
+{% block auto_footer_js %}
+     <!--icheck -->
+    <script src="/static/js/iCheck/jquery.icheck.js"></script>
+    <script src="/static/js/icheck-init.js"></script>
+    <!--multi-select-->
+    <script type="text/javascript" src="/static/js/jquery-multi-select/js/jquery.multi-select.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-multi-select/js/jquery.quicksearch.js"></script>
+    <script src="/static/js/multi-select-init.js"></script>
+    <!--tags input-->
+    <script src="/static/js/jquery-tags-input/jquery.tagsinput.js"></script>
+    <script src="/static/js/tagsinput-init.js"></script>
+    <!--bootstrap input mask-->
+    <script type="text/javascript" src="/static/js/bootstrap-inputmask/bootstrap-inputmask.min.js"></script>
+{% endblock %}

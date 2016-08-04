@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block content %}
+    {% load mytags %}
+    <!-- page heading start-->
+    <div class="page-heading">
+        <h3>
+            查看URL组
+        </h3>
+        <ul class="breadcrumb">
+            <li>
+                <a href="{% url 'upops_admin' %}">仪表盘</a>
+            </li>
+            <li class=""> URL管理 </li>
+            <li class="active"> 查看URL组 </li>
+        </ul>
+    </div>
+    <!-- page heading end-->
+            <div class="wrapper">
+
+            <!-- url list -->
+            <div  class="row">
+                <div class="col-md-10">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            URL组信息详情列表
+                            <span class="tools pull-right">
+                                <a href="javascript:;" class="fa fa-chevron-down"></a>
+                                <a href="javascript:;" class="fa fa-times"></a>
+                                </span>
+                        </header>
+                        <div class="panel-body">
+                            <section id="flip-scroll">
+                                    <form id="search_form" action="{% url 'url_group_list' %}">
+                                        <a href="{% url 'url_add_group' %}" class="btn btn-success">添加URL组</a>
+                                        <div class="col-md-3 pull-right" >
+                                            <form role="form" action="{% url 'url_add_group' %}">
+                                            <div class="input-group m-bot15">
+                                                <input type="text" class="form-control" name="search_name" placeholder="Username">
+                                                <span class="input-group-btn">
+                                                <button class="btn btn-info" type="submit" >Search!</button>
+                                                </span>
+                                            </div>
+                                            </form>
+                                        </div>
+                                        </form>
+                                <table class="table table-bordered table-striped table-condensed cf">
+                                    <thead class="cf">
+                                    <tr>
+                                        <th class="text-center">URL组</th>
+                                        <th class="text-center">URL个数</th>
+                                        <th class="text-center numeric">备注</th>
+                                        <th class="text-center numeric">操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for list in objects %}
+                                    <tr>
+                                        <td class="text-center"><a href="{% url 'url_list' %}?search_name={{ list.name }}">{{ list.name }}</a></td>
+                                        <td class="text-center"><a href="{% url 'url_list' %}?search_name={{ list.name }}">{{ list.id|url_group_num }}</a></td>
+                                        <td class="numeric">{{ list.comment }}</td>
+                                        <td class="text-center">
+                                            <a class="btn btn-danger btn-xs" href="{% url  'url_del' %}?group_id={{ list.id }}">删除</a>
+                                            <a class="btn btn-success btn-xs" href="{% url  'url_edit_group' %}?id={{ list.id }}">编辑</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% include "pagination.html" %}
+                            </section>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            </div>
+    {% endblock %}
+    {% block footer_js %}
+        <script src="/static/js/checkbox.js"></script>
+        <script>
+        function change_info(){
+        var args = $("#search_from").serialize();
+        window.location = "{% url 'dbm_db_perm' %}?" + args
+        }
+
+	    function revoke(username,role)
+        {
+            if (confirm("你确定要对"+username+"用户操作?"))
+                {
+                    var url = "{%  url 'dbm_db_revoke' %}?&username="+username+"&status="+role+"&ip=%"
+                    $.ajax({
+                        cache:false,
+                        url:url,
+                        type:"get",
+                        success:function(html){
+                            location.reload();
+                        }
+                    });
+                }
+        }
+        </script>
+{% endblock %}
